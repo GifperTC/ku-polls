@@ -4,6 +4,6 @@ Web application for conducting online polls and surveys.
 
 ## Project Documents
 
-[Vision Statements](../../wiki/Vision%20Statements)
+[Vision Statements](https://github.com/GifperTC/ku-polls/wiki/Vision-Statement)
 
-[Requirements](../../wiki/Requirements)
+[Requirements](https://github.com/GifperTC/ku-polls/wiki/Requirements)
