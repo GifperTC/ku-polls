@@ -1,8 +1,14 @@
+div {
+    position: relative;
+    top: 470px;
+    right: 20px;
+}
+
 li a {
     color: green;
 }
 
 body {
-    background: white url("image/Abstract_Light_background_04.gif")
+    background: white url("image/giphy.gif")
 no-repeat;
 }
