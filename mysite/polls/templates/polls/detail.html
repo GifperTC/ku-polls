@@ -2,6 +2,8 @@
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
+<a href="{% url 'polls:index'%}">
+    <input type="button" value="Back to List of Polls"></a>
 <form action="{% url 'polls:vote' question.id %}" method="post">
 {% csrf_token %}
 {% for choice in question.choice_set.all %}
