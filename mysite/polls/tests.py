@@ -67,8 +67,9 @@ class QuestionModelTests(TestCase):
         can_vote() returns True for questions whose pub_date is already passed current time and end_date is in the future.
         """
         time = timezone.now()
-        question1 = Question(pub_date=time, end_date=time+datetime.timedelta(hours=10))
-        self.assertIs(True, question1.can_vote())
+
+        question1 = Question(pub_date=time, end_date=time)
+        self.assertIs(False, question1.can_vote())
 
         question2 = Question(pub_date=time-datetime.timedelta(hours=10), end_date=time+datetime.timedelta(hours=10))
         self.assertIs(True, question2.can_vote())
@@ -78,9 +79,9 @@ class QuestionModelTests(TestCase):
 
         question4 = Question(pub_date=time+datetime.timedelta(hours=10), end_date=time)
         self.assertIs(False, question4.can_vote())
-        
-        question5 = Question(pub_date=time, end_date=time)
-        self.assertIs(False, question5.can_vote())
+
+        question5 = Question(pub_date=time, end_date=time+datetime.timedelta(hours=10))
+        self.assertIs(True, question5.can_vote())
 
         question6 = Question(pub_date=time-datetime.timedelta(hours=10), end_date=time)
         self.assertIs(False, question6.can_vote())
