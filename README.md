@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.com/GifperTC/ku-polls.svg?branch=master
+)](https://travis-ci.com/github/GifperTC/ku-polls)
+
 # Kasetsart Polls
 
 Web application for conducting online polls and surveys.
