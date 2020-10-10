@@ -6,7 +6,9 @@ from django.urls import reverse
 
 from .models import Question
 
+
 class QuestionModelTests(TestCase):
+    """A unittest class for question models functions and attributes."""
 
     def test_was_published_recently_with_future_question(self):
         """
@@ -14,7 +16,8 @@ class QuestionModelTests(TestCase):
         is in the future.
         """
         time = timezone.now() + datetime.timedelta(days=30)
-        future_question = Question(pub_date=time, end_date=time + datetime.timedelta(hours=10))
+        future_question = Question(
+            pub_date=time, end_date=time + datetime.timedelta(hours=10))
         self.assertIs(future_question.was_published_recently(), False)
 
     def test_was_published_recently_with_old_question(self):
@@ -23,7 +26,8 @@ class QuestionModelTests(TestCase):
         is older than 1 day.
         """
         time = timezone.now() - datetime.timedelta(days=1, seconds=1)
-        old_question = Question(pub_date=time, end_date=time + datetime.timedelta(hours=10))
+        old_question = Question(
+            pub_date=time, end_date=time + datetime.timedelta(hours=10))
         self.assertIs(old_question.was_published_recently(), False)
 
     def test_was_published_recently_with_recent_question(self):
@@ -32,16 +36,18 @@ class QuestionModelTests(TestCase):
         is within the last day.
         """
         time = timezone.now() - datetime.timedelta(hours=23, minutes=59, seconds=59)
-        recent_question = Question(pub_date=time, end_date=time + datetime.timedelta(hours=10))
-        self.assertIs(recent_question.was_published_recently(), True)    
+        recent_question = Question(
+            pub_date=time, end_date=time + datetime.timedelta(hours=10))
+        self.assertIs(recent_question.was_published_recently(), True)
 
     def test_is_published(self):
         """
-        is_published() returns True for questions whose pub_date
-        is before or is the current time.
+        is_published() returns True for questions whose pub_date is before 
+        or is the current time.
         """
         time = timezone.now()
-        recent_question = Question(pub_date=time, end_date=time + datetime.timedelta(hours=10))
+        recent_question = Question(
+            pub_date=time, end_date=time + datetime.timedelta(hours=10))
         self.assertIs(True, recent_question.is_published())
 
     def test_is_published_many_cases(self):
@@ -50,41 +56,52 @@ class QuestionModelTests(TestCase):
         """
         time = timezone.now()
 
-        question1 = Question(pub_date=time-datetime.timedelta(hours=10), end_date=time+datetime.timedelta(hours=10))
+        question1 = Question(pub_date=time-datetime.timedelta(hours=10),
+                             end_date=time+datetime.timedelta(hours=10))
         self.assertIs(True, question1.is_published())
 
-        question2 = Question(pub_date=time, end_date=time++ datetime.timedelta(hours=10))
+        question2 = Question(pub_date=time, end_date=time++
+                             datetime.timedelta(hours=10))
         self.assertIs(True, question2.is_published())
 
-        question3 = Question(pub_date=time+datetime.timedelta(hours=10), end_date=time+datetime.timedelta(hours=20))
-        self.assertIs(False ,question3.is_published())
+        question3 = Question(pub_date=time+datetime.timedelta(hours=10),
+                             end_date=time+datetime.timedelta(hours=20))
+        self.assertIs(False, question3.is_published())
 
-        question4 = Question(pub_date=time+datetime.timedelta(hours=10), end_date=time)
+        question4 = Question(
+            pub_date=time+datetime.timedelta(hours=10), end_date=time)
         self.assertIs(False, question4.is_published())
 
     def test_can_vote(self):
         """
-        can_vote() returns True for questions whose pub_date is already passed current time and end_date is in the future.
+        can_vote() returns True for questions whose pub_date is already passed 
+        current time and end_date is in the future.
         """
         time = timezone.now()
 
         question1 = Question(pub_date=time, end_date=time)
         self.assertIs(False, question1.can_vote())
 
-        question2 = Question(pub_date=time-datetime.timedelta(hours=10), end_date=time+datetime.timedelta(hours=10))
+        question2 = Question(pub_date=time-datetime.timedelta(hours=10),
+                             end_date=time+datetime.timedelta(hours=10))
         self.assertIs(True, question2.can_vote())
 
-        question3 = Question(pub_date=time+datetime.timedelta(hours=10), end_date=time+datetime.timedelta(hours=20))
+        question3 = Question(pub_date=time+datetime.timedelta(hours=10),
+                             end_date=time+datetime.timedelta(hours=20))
         self.assertIs(False, question3.can_vote())
 
-        question4 = Question(pub_date=time+datetime.timedelta(hours=10), end_date=time)
+        question4 = Question(
+            pub_date=time+datetime.timedelta(hours=10), end_date=time)
         self.assertIs(False, question4.can_vote())
 
-        question5 = Question(pub_date=time, end_date=time+datetime.timedelta(hours=10))
+        question5 = Question(pub_date=time, end_date=time +
+                             datetime.timedelta(hours=10))
         self.assertIs(True, question5.can_vote())
 
-        question6 = Question(pub_date=time-datetime.timedelta(hours=10), end_date=time)
+        question6 = Question(
+            pub_date=time-datetime.timedelta(hours=10), end_date=time)
         self.assertIs(False, question6.can_vote())
+
 
 def create_question(question_text, days):
     """
@@ -95,22 +112,19 @@ def create_question(question_text, days):
     time = timezone.now() + datetime.timedelta(days=days)
     return Question.objects.create(question_text=question_text, pub_date=time, end_date=time + datetime.timedelta(hours=10))
 
+
 class QuestionIndexViewTests(TestCase):
-    
+    """A unittest class for question models in index page."""
+
     def test_no_questions(self):
-        """
-        If no questions exist, an appropriate message is displayed.
-        """
+        """If no questions exist, an appropriate message is displayed."""
         response = self.client.get(reverse('polls:index'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "No polls are available.")
         self.assertQuerysetEqual(response.context['latest_question_list'], [])
 
     def test_past_question(self):
-        """
-        Questions with a pub_date in the past are displayed on the
-        index page.
-        """
+        """Questions with a pub_date in the past are displayed on the index page."""
         create_question(question_text="Past question.", days=-30)
         response = self.client.get(reverse('polls:index'))
         self.assertQuerysetEqual(
@@ -119,10 +133,7 @@ class QuestionIndexViewTests(TestCase):
         )
 
     def test_future_question(self):
-        """
-        Questions with a pub_date in the future aren't displayed on
-        the index page.
-        """
+        """Questions with a pub_date in the future aren't displayed on the index page."""
         create_question(question_text="Future question.", days=30)
         response = self.client.get(reverse('polls:index'))
         self.assertContains(response, "No polls are available.")
@@ -130,8 +141,8 @@ class QuestionIndexViewTests(TestCase):
 
     def test_future_question_and_past_question(self):
         """
-        Even if both past and future questions exist, only past questions
-        are displayed.
+        Even if both past and future questions exist,
+        only past question are displayed.
         """
         create_question(question_text="Past question.", days=-30)
         create_question(question_text="Future question.", days=30)
@@ -142,9 +153,7 @@ class QuestionIndexViewTests(TestCase):
         )
 
     def test_two_past_questions(self):
-        """
-        The questions index page may display multiple questions.
-        """
+        """The questions index page may display multiple questions."""
         create_question(question_text="Past question 1.", days=-30)
         create_question(question_text="Past question 2.", days=-5)
         response = self.client.get(reverse('polls:index'))
@@ -152,8 +161,11 @@ class QuestionIndexViewTests(TestCase):
             response.context['latest_question_list'],
             ['<Question: Past question 2.>', '<Question: Past question 1.>']
         )
-        
+
+
 class QuestionDetailViewTests(TestCase):
+    """A unittest class for question model in detail page."""
+
     def test_future_question(self):
         """
         The detail view of a question with a pub_date in the future
@@ -169,7 +181,8 @@ class QuestionDetailViewTests(TestCase):
         The detail view of a question with a pub_date in the past
         displays the question's text.
         """
-        past_question = create_question(question_text='Past Question.', days=-5)
+        past_question = create_question(
+            question_text='Past Question.', days=-5)
         url = reverse('polls:detail', args=(past_question.id,))
         response = self.client.get(url)
         self.assertContains(response, past_question.question_text)
