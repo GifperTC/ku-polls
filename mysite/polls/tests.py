@@ -6,7 +6,6 @@ from django.urls import reverse
 
 from .models import Question
 
-
 class QuestionModelTests(TestCase):
     """A unittest class for question models functions and attributes."""
 
