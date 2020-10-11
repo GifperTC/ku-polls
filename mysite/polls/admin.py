@@ -4,19 +4,15 @@ from .models import Choice, Question
 
 
 class ChoiceInline(admin.TabularInline):
-    """
-    Create 3 extra choice model after the default amount.
-    """
-    
+    """Initialize amount of extra choice after the default choices."""
+
     model = Choice
     extra = 3
 
 
 class QuestionAdmin(admin.ModelAdmin):
-    """
-    ...
-    """
-    
+    """CLass for details of question section in admin page."""
+
     fieldsets = [
         (None,               {'fields': ['question_text']}),
         ('Date information', {'fields': [

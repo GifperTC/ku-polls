@@ -6,7 +6,7 @@ from django.utils import timezone
 
 class Question(models.Model):
     """Question model with publication and ending date for voting."""
-    
+
     question_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
     end_date = models.DateTimeField('date ended')

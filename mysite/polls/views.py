@@ -33,7 +33,7 @@ class ResultsView(generic.DetailView):
 
 def vote(request, question_id):
     """
-    Return detail page html and redirect to index page 
+    Return detail page html and redirect to index page
     if the question is out of voting period.
 
     Parameters:

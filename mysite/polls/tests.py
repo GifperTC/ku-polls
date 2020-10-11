@@ -42,7 +42,7 @@ class QuestionModelTests(TestCase):
 
     def test_is_published(self):
         """
-        is_published() returns True for questions whose pub_date is before 
+        is_published() returns True for questions whose pub_date is before
         or is the current time.
         """
         time = timezone.now()
