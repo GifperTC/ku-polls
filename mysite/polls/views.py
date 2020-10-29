@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -30,7 +31,6 @@ class ResultsView(generic.DetailView):
     model = Question
     template_name = 'polls/results.html'
 
-
 def vote(request, question_id):
     """
     Return detail page html and redirect to index page
@@ -56,7 +56,7 @@ def vote(request, question_id):
         selected_choice.save()
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
 
-
+@login_required
 def detail(request, question_id):
     """
     Return detail page html and redirect to index page

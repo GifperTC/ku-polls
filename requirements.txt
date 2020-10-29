@@ -1,3 +1,4 @@
+django
 # required packages
 codecov
 coverage

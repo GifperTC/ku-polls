@@ -68,8 +68,8 @@ TEMPLATES = [
     },
 ]
 
+LOGIN_REDIRECT_URL = 'polls:index'
 WSGI_APPLICATION = 'mysite.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases

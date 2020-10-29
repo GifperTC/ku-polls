@@ -1,5 +1,6 @@
 import datetime
 
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 
@@ -10,18 +11,7 @@ class Question(models.Model):
     question_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
     end_date = models.DateTimeField('date ended')
-
-    def was_published_recently(self):
-        """
-        Return True if the question was published within the period of current time
-        and the the day before.
-        """
-        now = timezone.now()
-        return now - datetime.timedelta(days=1) <= self.pub_date <= now
-        was_published_recently.admin_order_field = 'pub_date'
-        was_published_recently.boolean = True
-        was_published_recently.short_description = 'Published recently?'
-
+        
     def is_published(self):
         """Return True if the publish date of the questionis before or equals current time."""
         return self.pub_date <= timezone.now()
@@ -44,3 +34,9 @@ class Choice(models.Model):
     def __str__(self):
         """Return this choice's text."""
         return self.choice_text
+
+
+class Vote(models.Model):
+    """Vote model"""
+
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
