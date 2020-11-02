@@ -1,17 +1,27 @@
 language: python
 
-python: "3.7"
+python: "3.8"
 
+# don't clone more than necessary
 git:
   depth: 1
 
+services:
+  - mysql
+
+env:
+  - DJANGO=3.1.1 DB=mysql SECRET_KEY='secret_key' DEBUG=True TIME_ZONE='Asia/Bangkok'
+
+# Install any dependencies
 install:
   - pip install -r requirements.txt
-  - pip install codecov
-  - pip install coverage
-    
-script:
-  - coverage run -m unittest discover -p "*_tests.py"
 
-after_script:
+before_script:
+#  - cp .env.example .env
+  - python manage.py migrate
+
+script:
+  - coverage run manage.py test polls/tests
+
+after_success:
   - bash <(curl -s https://codecov.io/bash)
